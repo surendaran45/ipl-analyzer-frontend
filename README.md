@@ -20,6 +20,7 @@ Prerequisites: Node.js 22 LTS (Vite 8 requires a modern Node.js release) and npm
 
 ```bash
 npm ci
+# Optional: copy .env.example to .env.local and configure the backend URL
 npm run dev
 ```
 
@@ -31,7 +32,7 @@ The frontend currently calls the deployed API at:
 
 `https://ipl-analyzer-backend.onrender.com`
 
-See `src/api.js` for the API client. The companion backend repository is [ipl-analyzer-backend](https://github.com/surendaran45/ipl-analyzer-backend). If you run the backend locally or deploy it to another host, update the API base URL in one place rather than duplicating endpoint strings across components.
+Set `VITE_API_BASE_URL` in `.env.local` to override this URL for local development or another deployment. See `.env.example` for the format. The companion backend repository is [ipl-analyzer-backend](https://github.com/surendaran45/ipl-analyzer-backend). If you run the backend locally or deploy it to another host, update the API base URL in one place rather than duplicating endpoint strings across components.
 
 ## Scripts
 
