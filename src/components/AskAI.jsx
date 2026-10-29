@@ -1,3 +1,4 @@
+import { API_BASE } from '../api'
 import { useState } from 'react'
 
 export default function AskAI({ context, prompt }) {
@@ -13,14 +14,14 @@ export default function AskAI({ context, prompt }) {
     const fullPrompt = `You are an expert IPL cricket analyst. Here is real data from the IPL Analyzer app:\n\n${context}\n\n${prompt}\n\nGive a sharp, specific, 4-6 sentence analysis based on this data. Be direct and insightful.`
 
     try {
-      const res = await fetch('http://127.0.0.1:8000/ask-ai', {
+      const res = await fetch(`${API_BASE}/ask-ai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt: fullPrompt })
       })
       const data = await res.json()
       setResponse(data.result || 'Could not get analysis.')
-    } catch (err) {
+    } catch {
       setResponse('Error connecting to backend. Make sure uvicorn is running.')
     }
 
