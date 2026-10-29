@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import { getSeasons, getSeasonStats, getTeams, getTeamStats } from '../api'
+import { getSeasons, getSeasonStats, getTeams } from '../api'
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
-  BarChart, Bar, Cell, Legend
+  BarChart, Bar, Cell
 } from 'recharts'
 
 const COLORS = [
