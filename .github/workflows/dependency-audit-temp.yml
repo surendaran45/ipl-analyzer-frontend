@@ -1,0 +1,43 @@
+name: Temporary npm dependency audit
+on:
+  push:
+    branches:
+      - audit-current-npm-dependencies
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Report dependency vulnerabilities
+        shell: bash
+        run: |
+          npm audit --json > npm-audit.json || true
+          node <<'NODE'
+          const fs = require('node:fs');
+          const report = JSON.parse(fs.readFileSync('npm-audit.json', 'utf8'));
+          console.log('VULNERABILITY SUMMARY');
+          console.log(JSON.stringify(report.metadata?.vulnerabilities ?? {}, null, 2));
+          console.log('DETAILS');
+          for (const [name, v] of Object.entries(report.vulnerabilities ?? {})) {
+            console.log(JSON.stringify({
+              name,
+              severity: v.severity,
+              direct: v.isDirect,
+              range: v.range,
+              fixAvailable: v.fixAvailable,
+              via: (v.via ?? []).map(x => typeof x === 'string' ? x : ({
+                name: x.name, title: x.title, range: x.range, url: x.url
+              }))
+            }));
+          }
+          NODE
